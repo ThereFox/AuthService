@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+option csharp_namespace = "WebAPI";
+
+package getInfo;
+
+service TokenController {
+  rpc GetInfoByToken (Tokens) returns (GetInfoResult);
+}
+
+message Tokens {
+  string AuthToken = 1;
+  string RefreshToken = 2;
+}
+
+message GetInfoResult
+{
+	bool IsSucsess = 1;
+	optional UserShortInfo info = 2;
+	optional ErrorInfo Error = 3;
+}
+
+message UserShortInfo
+{
+	string response = 4;
+}
+
+message ErrorInfo
+{
+	string Message = 5;
+	string ErrorCode = 6;
+}

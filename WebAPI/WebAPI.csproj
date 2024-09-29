@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Protos\GetInfo.proto" GrpcServices="Server" ProtoCompile="True" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Grpc.AspNetCore" Version="2.57.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Application\Application.csproj" />
+    <ProjectReference Include="..\AuntificationService\Domain.csproj" />
+    <ProjectReference Include="..\Infrastructure.JWT\Infrastructure.Tokens.JWT.csproj" />
+    <ProjectReference Include="..\Infrastructure.Tokens.Getter\Infrastructure.Tokens.AspNetCore.csproj" />
+    <ProjectReference Include="..\Persistense\Persistense.csproj" />
+  </ItemGroup>
+
+</Project>
