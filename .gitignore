@@ -1,0 +1,8 @@
+bin/
+obj/
+/packages/
+riderModule.iml
+/_ReSharper.Caches/
+.vs/
+API/Properties/launchSettings.json
+Persistense/Persistense - Backup.EF.Notifications.csproj
