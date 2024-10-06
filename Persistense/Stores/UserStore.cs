@@ -14,19 +14,19 @@ namespace Persistense.Stores
     {
         public async Task<Result<User>> GetByCredentialInfo(AuthCredentials credentials)
         {
-            return Result.Failure<User>("Not realised");
+            return Result.Failure<User>(" DAL Not realised");
             throw new NotImplementedException();
         }
 
         public async Task<Result<User>> GetById(Guid id)
         {
-            return Result.Failure<User>("Not realised");
+            return Result.Failure<User>(" DAL Not realised");
             throw new NotImplementedException();
         }
 
         public async Task<Result> SaveNew(User user)
         {
-            return Result.Failure("Not realised");
+            return Result.Failure(" DAL Not realised");
             throw new NotImplementedException();
         }
     }
