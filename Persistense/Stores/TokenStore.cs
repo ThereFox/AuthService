@@ -3,6 +3,7 @@ using CSharpFunctionalExtensions;
 using Domain.Entitys;
 using Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
+using Persistense.Convertations.ToDomain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -93,7 +94,7 @@ namespace Persistense.Stores
                 var recordByToken = await _dbcontext
                     .Tokens
                     .AsNoTracking()
-                    .FirstOrDefaultAsync(ex => ex.TokensPair.RefreshToken.Token == token || ex.TokensPair.Auth.Token == token);
+                    .FirstOrDefaultAsync(ex => ex.RefreshToken == token.Value || ex.AuthToken == token.Value);
 
                 if(recordByToken == default)
                 {
@@ -129,7 +130,7 @@ namespace Persistense.Stores
                 }
 
 
-                return Result.Success(token);
+                return token.ToDomain();
             }
             catch (Exception ex)
             {
@@ -146,7 +147,7 @@ namespace Persistense.Stores
 
             try
             {
-                await _dbcontext.AddAsync(tokens);
+                await _dbcontext.AddAsync(tokens.ToDTO());
 
                 await _dbcontext.SaveChangesAsync();
 
