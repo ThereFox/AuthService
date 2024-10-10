@@ -1,4 +1,5 @@
 ﻿using Application.Stores;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Persistense.Stores;
 using System;
@@ -11,8 +12,10 @@ namespace Persistense.DI
 {
     public static class PersistenseRegister
     {
-        public static IServiceCollection AddPersistense(this IServiceCollection collection)
+        public static IServiceCollection AddPersistense(this IServiceCollection collection, Action<DbContextOptionsBuilder> settings)
         {
+            collection.AddDbContext<ApplicationDBContext>(settings, ServiceLifetime.Scoped);
+
             collection.AddScoped<ITokenStore, TokenStore>();
             collection.AddScoped<IUserStore, UserStore>();
 
