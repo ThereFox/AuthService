@@ -2,16 +2,22 @@
 
 using Application.DI;
 using Infrastructure.Tokens.JWT;
+using Microsoft.EntityFrameworkCore;
 using Persistense.DI;
+using WebAPI.Configurations;
 using WebAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var configuration = builder.Configuration.GetSection("ServicesConfigs").Get<ServiceConfiguration>();
 
 builder.Services.AddGrpc();
 
 builder.Services
     .AddApplication()
-    .AddPersistense()
+    .AddPersistense(
+    ex => ex.UseNpgsql(configuration.MainDatabase.ConnectionString)
+    )
     .AddJWTTokenDriver();
 
 var app = builder.Build();
