@@ -27,17 +27,17 @@ namespace Persistense.Configurations
 
             var tokens = builder.OwnsOne(ex => ex.TokensPair);
 
-            tokens.Property(ex => ex.RefreshToken)
+            tokens.Property(ex => ex.RefreshToken.Token.Value)
                 .IsRequired()
                 .HasColumnName("RefreshToken");
 
-            tokens.Property(ex => ex.Auth)
+            tokens.Property(ex => ex.AuthToken.Token.Value)
                 .IsRequired()
                 .HasColumnName("AuthToken");
 
             builder.HasOne(ex => ex.Owner)
                 .WithMany(ex => ex.OwnedTokens)
-                .OnDelete(DeleteBehavior.Cascade)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
