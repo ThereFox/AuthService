@@ -3,12 +3,12 @@ using CSharpFunctionalExtensions;
 using Domain.Entitys;
 using Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
-using Persistense.Convertations.ToDomain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Persistense.DTOs;
 
 namespace Persistense.Stores
 {
@@ -101,7 +101,11 @@ namespace Persistense.Stores
                     return Result.Failure<bool>($"dont contain record with token {token.Value}");
                 }
 
-                return Result.Success(recordByToken.IsDisabled == false);
+                return Result.Success(true);
+
+                //throw new NotImplementedException();
+
+                //return Result.Success(recordByToken.IsDisabled == false);
             }
             catch (Exception ex)
             {
@@ -130,7 +134,7 @@ namespace Persistense.Stores
                 }
 
 
-                return token.ToDomain();
+                return Converters.ToDomain(token);
             }
             catch (Exception ex)
             {

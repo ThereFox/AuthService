@@ -12,14 +12,14 @@
 
   <ItemGroup>
     <PackageReference Include="Grpc.AspNetCore" Version="2.57.0" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.8" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\Infrastructure.JWT\Infrastructure.Tokens.JWT.csproj" />
-    <ProjectReference Include="..\Infrastructure.Tokens.Getter\Infrastructure.Tokens.AspNetCore.csproj" />
+    <ProjectReference Include="..\Infrastructure.Tokens.AspNet\Infrastructure.Tokens.AspNetCore.csproj" />
     <ProjectReference Include="..\Persistense\Persistense.csproj" />
   </ItemGroup>
 

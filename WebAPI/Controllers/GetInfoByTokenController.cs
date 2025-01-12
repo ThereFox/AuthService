@@ -3,7 +3,7 @@ using AuntificationService.Domain.ValueObjects;
 using Domain.ValueObjects;
 using Grpc.Core;
 
-namespace WebAPI.Services
+namespace WebAPI.Controllers
 {
     public class GetInfoController : TokenController.TokenControllerBase
     {
@@ -13,8 +13,8 @@ namespace WebAPI.Services
         {
             _useCase = useCase;
         }
-
-        public async override Task<GetInfoResult> GetInfoByToken(Tokens request, ServerCallContext context)
+        
+        public override async Task<GetInfoResult> GetInfoByToken(Tokens request, ServerCallContext context)
         {
             await Task.Delay(500);
 
@@ -23,13 +23,15 @@ namespace WebAPI.Services
 
             if(authToken.IsFailure || refreshToken.IsFailure)
             {
+                var errorMessage = authToken.IsFailure ? authToken.Error : refreshToken.Error;
+                
                 return new GetInfoResult()
                 {
                     IsSucsess = false,
                     Error = new ErrorInfo()
                     {
                         ErrorCode = "-11",
-                        Message = "invalid input"
+                        Message = $"invalid input: {errorMessage}"
                     }
                 };
             }

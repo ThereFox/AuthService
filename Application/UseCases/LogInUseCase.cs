@@ -19,6 +19,15 @@ namespace Application.UseCases
         private readonly ITokenGenerator _generator;
         private readonly ITokenStore _tokenStore;
         private readonly ITokenSetter _updater;
+
+        public AuthentificateUseCase(IUserStore userStore, ITokenGenerator generator, ITokenStore tokenStore, ITokenSetter updater)
+        {
+            _userStore = userStore;
+            _generator = generator;
+            _tokenStore = tokenStore;
+            _updater = updater;
+        }
+
         public async Task<Result> Authintificate(AuthCredentials credentials)
         {
             var getUserByCredentialResult = await _userStore.GetByCredentialInfo(credentials);

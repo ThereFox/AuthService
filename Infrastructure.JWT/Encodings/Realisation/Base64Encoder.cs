@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Tokens.JWT.Encodings.Realisation
 {
-    internal class Base64Encoder : IEncodingReader
+    public class Base64Encoder : IEncodingReader
     {
         public string Decode(string input)
         {

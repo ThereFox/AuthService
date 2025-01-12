@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Tokens.JWT.Encodings
 {
-    internal interface IEncodingReader
+    public interface IEncodingReader
     {
         public string Encode(string input);
         public string Decode(string input);

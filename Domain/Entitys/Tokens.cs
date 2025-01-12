@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AuntificationService.Domain.Entitys;
 using AuntificationService.Domain.ValueObjects;
@@ -47,6 +48,7 @@ namespace Domain.Entitys
 
             return Result.Success(new Tokens(id, isDisabled, createDate, tokens, owner));
         }
+        
         public static Result<Tokens> Create(DateTime createDate, TokensPair tokens, User owner)
         {
             if (tokens == null)

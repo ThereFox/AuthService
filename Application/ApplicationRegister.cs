@@ -14,6 +14,9 @@ namespace Application.DI
         {
             collection.AddTransient<GetInfoByTokenUseCase>();
             collection.AddTransient<RefreshTokenUseCase>();
+            collection.AddTransient<AuthentificateUseCase>();
+            collection.AddTransient<LogOutUseCase>();
+            collection.AddTransient<RegistrateUseCase>();
 
             return collection;
         }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Tokens.JWT.Payloads
 {
-    internal abstract class PayloadBase
+    public abstract class PayloadBase
     {
         [JsonPropertyName("iss")]
         public string Issuer { get; set; }

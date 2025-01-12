@@ -6,8 +6,21 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Tokens.JWT.Payloads.SubTypes
 {
-    internal class DateTimeTimeStemp
+    public class DateTimeTimeStemp
     {
         public long stemp {  get; set; }
+
+        public DateTimeTimeStemp(long stemp)
+        {
+            this.stemp = stemp;
+        }
+
+        public static DateTimeTimeStemp FromDateTime(DateTime dateTime)
+        {
+            var stemp = dateTime - DateTime.UnixEpoch;
+            
+            return new DateTimeTimeStemp(stemp.Ticks);
+        }
+        
     }
 }

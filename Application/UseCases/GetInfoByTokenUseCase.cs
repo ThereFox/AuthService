@@ -58,7 +58,7 @@ namespace Application.UseCases
                 return refreshTokens.ConvertFailure<UserShortInfo>();
             }
 
-            return await getInfoFromAuthToken(refreshTokens.Value.TokensPair.Auth);
+            return await getInfoFromAuthToken(refreshTokens.Value.TokensPair.AuthToken);
         }
 
         private async Task<Result<UserShortInfo>> getInfoFromAuthToken(AuthorisationToken token)

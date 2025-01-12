@@ -6,36 +6,41 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Persistense.DTOs;
 
 namespace Persistense.Configurations
 {
-    public class UserConfiguration : IEntityTypeConfiguration<User>
+    public class UserConfiguration : IEntityTypeConfiguration<UserDTO>
     {
-        public void Configure(EntityTypeBuilder<User> builder)
+        public void Configure(EntityTypeBuilder<UserDTO> builder)
         {
             builder
                 .HasKey(x => x.Id);
 
             builder
-                .OwnsOne(ex => ex.Role)
+                .Property(x => x.Id)
+                .HasColumnName("Id");
+            
+            builder
                 .Property(ex => ex.RoleId)
                 .HasColumnName("RoleId");
 
-            var credentials = builder.OwnsOne(ex => ex.Credentials);
-
-            credentials
+            builder
                 .Property(ex => ex.Login)
                 .HasColumnName("Login")
                 .IsRequired();
 
-            credentials
-                .Property(ex => ex.PasswordHash)
+            builder
+                .Property(ex => ex.Password)
                 .HasColumnName("Password")
                 .IsRequired();
 
-            builder.HasMany(ex => ex.OwnedTokens)
-                .WithOne(ex => ex.Owner)
-                .OnDelete(DeleteBehavior.NoAction);
+            builder.HasMany(ex => ex.Tokens)
+                .WithOne(ex => ex.User)
+                .IsRequired()
+                .HasForeignKey(ex => ex.OwnerId)
+                .HasPrincipalKey(ex => ex.Id)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

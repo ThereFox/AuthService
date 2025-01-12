@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Persistense.DTOs;
 
 namespace Persistense.Configurations
 {
-    public class TokensConfiguration : IEntityTypeConfiguration<Tokens>
+    public class TokensConfiguration : IEntityTypeConfiguration<TokensPairDTO>
     {
-        public void Configure(EntityTypeBuilder<Tokens> builder)
+        public void Configure(EntityTypeBuilder<TokensPairDTO> builder)
         {
             builder.HasKey(x => x.Id);
 
@@ -19,24 +20,21 @@ namespace Persistense.Configurations
                 .Property(x => x.Id)
                 .ValueGeneratedNever();
 
-            builder.Property(ex => ex.IsDisabled)
-                .HasDefaultValue(false);
+            builder.Property(ex => ex.CreatedAt);
 
-            builder.Property(ex => ex.CreateDate)
-                .HasDefaultValue(DateTime.Now);
-
-            var tokens = builder.OwnsOne(ex => ex.TokensPair);
-
-            tokens.Property(ex => ex.RefreshToken.Token.Value)
+            
+            builder.Property(ex => ex.RefreshToken)
                 .IsRequired()
                 .HasColumnName("RefreshToken");
 
-            tokens.Property(ex => ex.AuthToken.Token.Value)
+            builder.Property(ex => ex.AuthToken)
                 .IsRequired()
                 .HasColumnName("AuthToken");
 
-            builder.HasOne(ex => ex.Owner)
-                .WithMany(ex => ex.OwnedTokens)
+            builder.HasOne(ex => ex.User)
+                .WithMany(ex => ex.Tokens)
+                .HasForeignKey(ex => ex.OwnerId)
+                .HasPrincipalKey(ex => ex.Id)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

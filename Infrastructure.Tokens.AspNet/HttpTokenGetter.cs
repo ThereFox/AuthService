@@ -18,6 +18,13 @@ namespace Infrastructure.Tokens.Getter
         private readonly string _headerName;
         private readonly string _cookieName;
 
+        public HttpTokenGetter(IHttpContextAccessor contextAcsessor, string headerName, string cookieName)
+        {
+            _contextAcsessor = contextAcsessor;
+            _headerName = headerName;
+            _cookieName = cookieName;
+        }
+
 
         public Result<TokensPair> GetTokensFromCurrentUser()
         {
@@ -42,7 +49,18 @@ namespace Infrastructure.Tokens.Getter
 
         public void SetTokensForCurrentUser(TokensPair tokens)
         {
-            throw new NotImplementedException();
+            var response = _contextAcsessor.HttpContext.Response;
+            
+            response.Headers.Add(_headerName, tokens.AuthToken.Token.Value);
+            response.Cookies.Append(_cookieName, tokens.RefreshToken.Token.Value, new CookieOptions()
+            {
+                Expires = DateTimeOffset.MaxValue,
+                HttpOnly = true,
+                Secure = true,
+                IsEssential = true,
+                Path = "/admin"
+            });
+
         }
 
     }

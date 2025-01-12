@@ -7,48 +7,63 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.ValueObjects;
 
 namespace Infrastructure.Tokens.JWT.JWTCreater
 {
-    internal class TokenParser
+    public class JWTTokenParser
     {
+        private readonly JWTTokenSigner _signer;
         private readonly IEncodingReader _encoder;
 
-        internal Result<T> Parse<T>(string token) where T: PayloadBase
+        public JWTTokenParser(JWTTokenSigner signer, IEncodingReader encoder)
         {
-            if (String.IsNullOrWhiteSpace(token))
-            {
-                return Result.Failure<T>("empty input");
-            }
-
-            var parts = token.Split('.');
-
-            if(parts.Length != 3)
-            {
-                return Result.Failure<T>("Invalid token format");
-            }
-
-            if (haveContentChanges(token))
-            {
-                return Result.Failure<T>("Token info was modificated");
-            }
-
-            return readEncodedPayload<T>(parts[1]);
-
+            _signer = signer;
+            _encoder = encoder;
         }
 
-
-        private bool haveContentChanges(string content)
+        public Result<PayloadType> GetPayloadFromToken<PayloadType>(Token token)
+            where PayloadType : PayloadBase, new()
         {
-            return false;
+            if (token == null)
+            {
+                return Result.Failure<PayloadType>("Token is null");
+            }
+            
+            var parts = token.Value.Split('.');
+            
+            var header = parts[0];
+            var body = parts[1];
+            var signature = parts[2];
+
+            if (IsInitialToken(header, body, signature) == false)
+            {
+                return Result.Failure<PayloadType>("token was modified");
+            }
+
+            return getPayloadFromBody<PayloadType>(body);
         }
 
-        private Result<T> readEncodedPayload<T>(string input) where T: PayloadBase
+        private bool IsInitialToken(string header, string body, string signature)
         {
-            var decodedPayload = _encoder.Decode(input);
+            try
+            {
+                var resignedString = _signer.GetSignature(header, body);
 
-            return JsonResultConverter.Deserialise<T>(decodedPayload);
+                return resignedString.Equals(signature);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
+        private Result<PayloadType> getPayloadFromBody<PayloadType>(string body)
+            where PayloadType : PayloadBase, new()
+        {
+            var payloadJson = _encoder.Decode(body);
+            return JsonResultConverter.Deserialise<PayloadType>(payloadJson);
+        }
+        
     }
 }

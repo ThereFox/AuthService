@@ -3,13 +3,13 @@ using AuntificationService.Domain.Entitys;
 using AuntificationService.Domain.ValueObjects;
 using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
-using Persistense.Convertations.ToDomain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Persistense.DTOs;
 
 namespace Persistense.Stores
 {
@@ -69,7 +69,7 @@ namespace Persistense.Stores
                     return Result.Failure<User>("Dont have user with this credentials");
                 }
 
-                return result.ToDomain();
+                return UserConverters.ToDomain(result);
 
             }
             catch (Exception ex)

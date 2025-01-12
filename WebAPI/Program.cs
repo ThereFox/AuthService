@@ -1,29 +1,31 @@
-
-
 using Application.DI;
+using Infrastructure.Tokens.Getter;
 using Infrastructure.Tokens.JWT;
 using Microsoft.EntityFrameworkCore;
 using Persistense.DI;
 using WebAPI.Configurations;
-using WebAPI.Services;
+using WebAPI.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration.GetSection("ServicesConfigs").Get<ServiceConfiguration>();
 
-builder.Services.AddGrpc();
+//builder.Services.AddGrpc();
+builder.Services.AddControllers();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services
     .AddApplication()
+    .AddHttpTokenGetter("Test", "test")
     .AddPersistense(
-    ex => ex.UseNpgsql(configuration.MainDatabase.ConnectionString)
+    ex => ex.UseNpgsql(configuration.MainDatabase.ConnectionString).EnableDetailedErrors()
     )
-    .AddJWTTokenDriver();
+    .AddJWTTokenDriver("mySecret");
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-app.MapGrpcService<GetInfoController>();
-app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
+app.UseRouting();
+//app.MapGrpcService<GetInfoController>().RequireHost("*:6000");
+app.MapControllers();
 
 app.Run();
