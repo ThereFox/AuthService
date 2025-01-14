@@ -12,6 +12,6 @@ namespace Application.Interfaces
     public interface ITokenParser
     {
         public Result<AuthTokenPayload> GetInfoFromAuthToken(AuthorisationToken token);
-        public Result<object> GetInfoFromRefreshToken(RefreshToken token);
+        public Result<RefreshTokenPayload> GetInfoFromRefreshToken(RefreshToken token);
     }
 }

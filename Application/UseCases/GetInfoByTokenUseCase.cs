@@ -32,17 +32,17 @@ namespace Application.UseCases
         }
         public async Task<Result<UserShortInfo>> GetInfo(AuthorisationToken auth, RefreshToken token)
         {
-            var checkTokenActiveResult = await _tokenStore.IsActiveToken(auth.Token);
-
-            if (checkTokenActiveResult.IsFailure)
-            {
-                return checkTokenActiveResult.ConvertFailure<UserShortInfo>();
-            }
-
-            if (checkTokenActiveResult.Value == false)
-            {
-                return Result.Failure<UserShortInfo>("current token disabled");
-            }
+            // var checkTokenActiveResult = await _tokenStore.IsActiveToken(auth.Token);
+            //
+            // if (checkTokenActiveResult.IsFailure)
+            // {
+            //     return checkTokenActiveResult.ConvertFailure<UserShortInfo>();
+            // }
+            //
+            // if (checkTokenActiveResult.Value == false)
+            // {
+            //     return Result.Failure<UserShortInfo>("current token disabled");
+            // }
 
             var getInfoFromAuthTokenResult = await getInfoFromAuthToken(auth);
 
@@ -70,7 +70,7 @@ namespace Application.UseCases
                 return tokenInfo.ConvertFailure<UserShortInfo>();
             }
 
-            var getUserInfoResult = await _userStore.GetById(tokenInfo.Value.Id);
+            var getUserInfoResult = await _userStore.GetById(tokenInfo.Value.UserId);
 
             if (getUserInfoResult.IsFailure)
             {

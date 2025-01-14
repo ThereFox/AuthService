@@ -16,8 +16,6 @@ namespace WebAPI.Controllers
         
         public override async Task<GetInfoResult> GetInfoByToken(Tokens request, ServerCallContext context)
         {
-            await Task.Delay(500);
-
             var authToken = Token.Create(request.AuthToken);
             var refreshToken = Token.Create(request.RefreshToken);
 
@@ -58,7 +56,7 @@ namespace WebAPI.Controllers
             {
                 return new GetInfoResult()
                 {
-                    IsSucsess = response.IsSuccess,
+                    IsSucsess = response.IsFailure,
                     Error = new ErrorInfo()
                     {
                         ErrorCode = "-5",
@@ -74,7 +72,7 @@ namespace WebAPI.Controllers
                     IsSucsess = response.IsSuccess,
                     Info = new UserShortInfo()
                     {
-                        Response = "Test"
+                        Response = $"{response.Value.UserId} - {response.Value.Email} - {response.Value.RoleId}"
                     }
                 };
             }

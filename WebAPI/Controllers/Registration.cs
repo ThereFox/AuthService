@@ -47,7 +47,7 @@ public class RegistrationController : Controller
             return BadRequest(res.Error);
         }
         
-        return Ok(res.Value);
+        return Ok();
     }
     
     [HttpPost]

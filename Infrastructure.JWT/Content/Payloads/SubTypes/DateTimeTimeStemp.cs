@@ -21,6 +21,10 @@ namespace Infrastructure.Tokens.JWT.Payloads.SubTypes
             
             return new DateTimeTimeStemp(stemp.Ticks);
         }
-        
+
+        public DateTime ToDateTime()
+        {
+            return DateTime.UnixEpoch.AddTicks(stemp);
+        }
     }
 }

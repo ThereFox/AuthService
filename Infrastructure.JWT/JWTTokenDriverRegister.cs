@@ -26,7 +26,7 @@ namespace Infrastructure.Tokens.JWT
             services.AddScoped<JWTTokenSigner>(
                 ex =>
                 {
-                    var encoder = new HMACSHA256();
+                    var encoder = new HMACSHA256(Encoding.UTF8.GetBytes(jwtSecret));
                     return new JWTTokenSigner(encoder, jwtSecret);
                 }
                 );
