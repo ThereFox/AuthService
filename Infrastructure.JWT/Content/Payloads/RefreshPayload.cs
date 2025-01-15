@@ -10,6 +10,9 @@ namespace Infrastructure.Tokens.JWT.Payloads
 {
     internal class RefreshPayload : PayloadBase
     {
+        [JsonPropertyName("own")]
+        public Guid OwnerId { get; set; }
+        
         [JsonPropertyName("nbf")]
         public DateTimeTimeStemp NotActiveBefore { get; set; }
         

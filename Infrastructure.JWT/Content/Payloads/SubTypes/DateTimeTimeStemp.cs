@@ -10,6 +10,8 @@ namespace Infrastructure.Tokens.JWT.Payloads.SubTypes
     {
         public long stemp {  get; set; }
 
+        public DateTime DateTime => this.ToDateTime();
+        
         public DateTimeTimeStemp(long stemp)
         {
             this.stemp = stemp;

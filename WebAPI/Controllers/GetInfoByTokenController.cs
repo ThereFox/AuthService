@@ -56,7 +56,7 @@ namespace WebAPI.Controllers
             {
                 return new GetInfoResult()
                 {
-                    IsSucsess = response.IsFailure,
+                    IsSucsess = response.IsSuccess,
                     Error = new ErrorInfo()
                     {
                         ErrorCode = "-5",

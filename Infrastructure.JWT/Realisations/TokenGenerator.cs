@@ -91,6 +91,7 @@ namespace Infrastructure.Tokens.JWT.Driver
             var authPayload = new RefreshPayload()
             {
                 Issuer = MyServiceName,
+                OwnerId = user.Id,
                 IssuetAt = DateTimeTimeStemp.FromDateTime(DateTime.Now),
                 ExpirationDate = DateTimeTimeStemp.FromDateTime(DateTime.Now + refreshTtl),
                 NotActiveBefore = DateTimeTimeStemp.FromDateTime(DateTime.Now + authTtl),

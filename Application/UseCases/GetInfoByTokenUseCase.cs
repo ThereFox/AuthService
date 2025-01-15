@@ -51,7 +51,14 @@ namespace Application.UseCases
                 return getInfoFromAuthTokenResult.Value;
             }
 
-            var refreshTokens = _refreshTokenUseCase.RefreshToken(token);
+            var getInfoFromRefreshToken = _tokenParser.GetInfoFromRefreshToken(token);
+            
+            if (getInfoFromRefreshToken.IsFailure)
+            {
+                return getInfoFromRefreshToken.ConvertFailure<UserShortInfo>();
+            }
+            
+            var refreshTokens = await _refreshTokenUseCase.RefreshToken(token);
 
             if (refreshTokens.IsFailure)
             {

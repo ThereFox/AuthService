@@ -61,7 +61,7 @@ namespace Infrastructure.Tokens.JWT.Driver
 
             if (content.IsFailure)
             {
-                return content.ConvertFailure<RefreshTokenPayload>();
+                return Result.Failure<RefreshTokenPayload>($"Error with refresh token: {content.Error}");
             }
             
             var payload = content.Value;
@@ -81,7 +81,7 @@ namespace Infrastructure.Tokens.JWT.Driver
                 return Result.Failure<RefreshTokenPayload>("Is not active");
             }
 
-            return RefreshTokenPayload.Create(payload.IssuetAt.ToDateTime(), payload.ExpirationDate.ToDateTime());
+            return RefreshTokenPayload.Create(payload.OwnerId, payload.IssuetAt.ToDateTime(), payload.ExpirationDate.ToDateTime());
 
         }
     }
