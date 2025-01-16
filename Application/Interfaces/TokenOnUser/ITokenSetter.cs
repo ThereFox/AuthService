@@ -11,5 +11,6 @@ namespace Application.Interfaces.TokenOnUser
     public interface ITokenSetter
     {
         public void SetTokensForCurrentUser(TokensPair tokens);
+        public void RemoveTokensFromCurrentUser();
     }
 }

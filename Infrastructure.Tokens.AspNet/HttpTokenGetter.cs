@@ -63,5 +63,12 @@ namespace Infrastructure.Tokens.Getter
 
         }
 
+        public void RemoveTokensFromCurrentUser()
+        {
+            var context = _contextAcsessor.HttpContext;
+            
+            context.Response.Cookies.Delete(_cookieName);
+            context.Response.Headers.Remove(_headerName);
+        }
     }
 }

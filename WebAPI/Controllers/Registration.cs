@@ -74,10 +74,13 @@ public class RegistrationController : Controller
     [Route("logout")]
     public async Task<IActionResult> LogOut()
     {
-        var tokent = _getter.GetTokensFromCurrentUser();
+        var logoutResult = _logOutUseCase.LogOut();
 
-        _logOutUseCase.LogOut(null);
-
-        return BadRequest();
+        if (logoutResult.IsFailure)
+        {
+            return BadRequest(logoutResult.Error);
+        }
+        
+        return Ok();
     }
 }
