@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Persistense.DI;
 using WebAPI.Configurations;
+using WebAPI.Configurations.Services;
 using WebAPI.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,11 +26,30 @@ builder.WebHost.ConfigureKestrel(
         });
     });
 
-var configuration = builder.Configuration.GetSection("ServicesConfigs").Get<ServiceConfiguration>();
+
+
+ServiceConfiguration configuration;
+
+if (builder.Environment.IsDevelopment())
+{
+    configuration = builder.Configuration.GetSection("ServicesConfigs").Get<ServiceConfiguration>();
+}
+else
+{
+    var connectionString = Environment.GetEnvironmentVariable("ConnectionString");
+
+    if (string.IsNullOrWhiteSpace(connectionString))
+    {
+        throw new InvalidCastException("Connection string is invalid");
+    }
+
+    configuration = new ServiceConfiguration(new DatabaseConfigInputObject(connectionString));
+}
 
 builder.Services.AddGrpc();
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddGrpcReflection();
 
 builder.Services
     .AddApplication()
@@ -43,6 +63,8 @@ var app = builder.Build();
 
 app.UseRouting();
 app.MapGrpcService<GetInfoController>().RequireHost($"*:{grpcPort}");
+app.MapGrpcReflectionService();
 app.MapControllers().RequireHost($"*:{restPort}");
+
 
 app.Run();

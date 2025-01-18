@@ -1,4 +1,5 @@
-﻿using Application.UseCases;
+﻿using System.Text.Json.Serialization;
+using Application.UseCases;
 using AuntificationService.Domain.ValueObjects;
 using Domain.ValueObjects;
 using Grpc.Core;
@@ -72,7 +73,8 @@ namespace WebAPI.Controllers
                     IsSucsess = response.IsSuccess,
                     Info = new UserShortInfo()
                     {
-                        Response = $"{response.Value.UserId} - {response.Value.Email} - {response.Value.RoleId}"
+                        UserId = response.Value.UserId.ToString(),
+                        UserRoleId = response.Value.RoleId
                     }
                 };
             }

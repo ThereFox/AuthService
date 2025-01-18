@@ -22,11 +22,12 @@ message GetInfoResult
 
 message UserShortInfo
 {
-	string response = 4;
+	string userId = 4;
+	int32 userRoleId = 5;
 }
 
 message ErrorInfo
 {
-	string Message = 5;
-	string ErrorCode = 6;
+	string Message = 6;
+	string ErrorCode = 7;
 }
