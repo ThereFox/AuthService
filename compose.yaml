@@ -1,0 +1,36 @@
+﻿services:
+  webapi:
+    image: webapi
+    environment:
+      REST_PORT: 5500
+      gRPC_PORT: 6000
+      Configuration: /run/secrets/authSecrets
+    secrets:
+      - authSecrets
+    build:
+      context: .
+      dockerfile: WebAPI/Dockerfile
+    networks:
+      - authNetwork
+    ports:
+      - 5500:5500
+      - 6000:6000
+      
+  database:
+    hostname: authdb
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=testdatabase
+      - POSTGRES_PASSWORD=testPassword
+      - POSTGRES_USER=testUser
+    ports:
+      - 5432:5432
+    networks:
+      - authNetwork
+
+secrets:
+  authSecrets:
+    file: ./WebAPI/appsettings.json
+    
+networks:
+  authNetwork:
