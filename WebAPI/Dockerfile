@@ -3,8 +3,8 @@
 ARG REST_PORT
 ENV REST_PORT $REST_PORT
 
-ARG databaseConnectionString
-ENV ConnectionString $databaseConnectionString
+ARG Configuration
+ENV Configuration $Configuration
 
 ARG gRPC_PORT
 ENV gRPC_PORT $GRPC_PORT

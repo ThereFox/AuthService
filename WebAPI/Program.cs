@@ -10,6 +10,13 @@ using WebAPI.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var secretsFile = Environment.GetEnvironmentVariable("Configuration");
+
+if (string.IsNullOrEmpty(secretsFile) == false)
+{
+    builder.Configuration.AddJsonFile(secretsFile);   
+}
+
 var restPort = int.Parse(Environment.GetEnvironmentVariable("REST_PORT") ?? "5279");
 var grpcPort = int.Parse(Environment.GetEnvironmentVariable("gRPC_PORT") ?? "6000");
 
@@ -26,25 +33,7 @@ builder.WebHost.ConfigureKestrel(
         });
     });
 
-
-
-ServiceConfiguration configuration;
-
-if (builder.Environment.IsDevelopment())
-{
-    configuration = builder.Configuration.GetSection("ServicesConfigs").Get<ServiceConfiguration>();
-}
-else
-{
-    var connectionString = Environment.GetEnvironmentVariable("ConnectionString");
-
-    if (string.IsNullOrWhiteSpace(connectionString))
-    {
-        throw new InvalidCastException("Connection string is invalid");
-    }
-
-    configuration = new ServiceConfiguration(new DatabaseConfigInputObject(connectionString));
-}
+var configuration = builder.Configuration.GetSection("ServicesConfigs").Get<ServiceConfiguration>();
 
 builder.Services.AddGrpc();
 builder.Services.AddControllers();
