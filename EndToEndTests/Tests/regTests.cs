@@ -84,7 +84,7 @@ public class regTests : IClassFixture<DatabaseFixture>, IAsyncLifetime
             "http://localhost:5501/public/login", loginContent);
         
         //assert
-        Assert.True(authResponseMessage.IsSuccessStatusCode);z
+        Assert.True(authResponseMessage.IsSuccessStatusCode);
     }
 
     
