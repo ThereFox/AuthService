@@ -3,6 +3,7 @@ using Infrastructure.Tokens.Getter;
 using Infrastructure.Tokens.JWT;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Persistense.DI;
 using WebAPI.Configurations;
 using WebAPI.Configurations.Services;
@@ -33,7 +34,19 @@ builder.WebHost.ConfigureKestrel(
         });
     });
 
-var configuration = builder.Configuration.GetSection("ServicesConfigs").Get<ServiceConfiguration>();
+var configuration = builder.Configuration.GetSection("ServicesConfigs");
+
+var servicesConfig = configuration.Get<ServiceConfiguration>();
+
+if (servicesConfig == null)
+{
+    servicesConfig = JsonConvert.DeserializeObject<ServiceConfiguration>(configuration.Value);
+
+    if (servicesConfig == null)
+    {
+        throw new ApplicationException("ServicesConfigs not found");
+    }
+}
 
 builder.Services.AddGrpc();
 builder.Services.AddControllers();
@@ -42,11 +55,11 @@ builder.Services.AddGrpcReflection();
 
 builder.Services
     .AddApplication()
-    .AddHttpTokenGetter("AuthToken", "RefreshToken")
+    .AddHttpTokenGetter(servicesConfig.JWTConfig.HeaderName, servicesConfig.JWTConfig.CookeyName)
     .AddPersistense(
-    ex => ex.UseNpgsql(configuration.MainDatabase.ConnectionString).EnableDetailedErrors()
+    ex => ex.UseNpgsql(servicesConfig.MainDatabase.ConnectionString).EnableDetailedErrors()
     )
-    .AddJWTTokenDriver("mySecret");
+    .AddJWTTokenDriver(servicesConfig.JWTConfig.Secret);
 
 var app = builder.Build();
 
@@ -57,3 +70,6 @@ app.MapControllers().RequireHost($"*:{restPort}");
 
 
 app.Run();
+
+
+public partial class Program { }
