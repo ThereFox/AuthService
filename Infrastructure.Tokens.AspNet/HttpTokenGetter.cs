@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Infrastructure.Tokens.JWT.Converters;
 
 namespace Infrastructure.Tokens.Getter
 {
@@ -42,9 +43,17 @@ namespace Infrastructure.Tokens.Getter
             var authTokenRaw = context.Request.Headers[_headerName].First();
             var refreshTokenRaw = context.Request.Cookies[_cookieName];
 
-            return Result.Failure<TokensPair>("NotRealised");
-            //var authToken = AuthorisationToken
+            var validateAuthToken = authTokenRaw.ToAuthorisationToken();
+            var ValidaterefreshToken = refreshTokenRaw.ToRefreshToken();
 
+            if (validateAuthToken.IsFailure || ValidaterefreshToken.IsFailure)
+            {
+                return Result.Failure<TokensPair>("request dont contain a valid tokens");
+            }
+            
+            var pair = TokensPair.Create(validateAuthToken.Value, ValidaterefreshToken.Value);
+            
+            return pair;
         }
 
         public void SetTokensForCurrentUser(TokensPair tokens)
