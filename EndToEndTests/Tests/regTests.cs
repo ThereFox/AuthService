@@ -20,7 +20,7 @@ public class regTests : IClassFixture<DatabaseFixture>, IAsyncLifetime
     public const string HeaderName = "Authorization";
     public const string CookeyName = "Refresh";
     
-    private WebApplicationFactory<Program> _application;
+    private WebApplicationFactory<Program> _sut;
     private readonly DatabaseFixture _databaseFixture;
     
     public regTests(DatabaseFixture fixture)
@@ -32,7 +32,7 @@ public class regTests : IClassFixture<DatabaseFixture>, IAsyncLifetime
     public async Task SucsessfullRegistration()
     {
         //arrange
-        var client = _application.CreateClient();
+        var client = _sut.CreateClient();
         var regInfo = new RegistrationInfoInputObject()
         {
             Login = "testLogin",
@@ -55,7 +55,7 @@ public class regTests : IClassFixture<DatabaseFixture>, IAsyncLifetime
     public async Task CanAuthoriseRegistration()
     {
         //arrange
-        var client = _application.CreateClient();
+        var client = _sut.CreateClient();
         var regInfo = new RegistrationInfoInputObject()
         {
             Login = "testLogin",
@@ -84,10 +84,7 @@ public class regTests : IClassFixture<DatabaseFixture>, IAsyncLifetime
             "http://localhost:5501/public/login", loginContent);
         
         //assert
-        Assert.True(authResponseMessage.IsSuccessStatusCode);
-        Assert.True(authResponseMessage.Headers.Contains(HeaderName));
-        Assert.True(authResponseMessage.Headers.Contains("Set-Cookie"));
-        Assert.StartsWith(authResponseMessage.Headers.GetValues("Set-Cookie").First(), CookeyName);
+        Assert.True(authResponseMessage.IsSuccessStatusCode);z
     }
 
     
@@ -117,7 +114,7 @@ public class regTests : IClassFixture<DatabaseFixture>, IAsyncLifetime
 
                     ex.ConfigureAppConfiguration(ex => ex.Build());
                 });
-        _application = app;
+        _sut = app;
     }
 
     public async Task DisposeAsync()

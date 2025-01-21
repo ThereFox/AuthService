@@ -5,6 +5,7 @@ namespace WebAPI.Configurations
 {
     public record ServiceConfiguration
     (
-        DatabaseConfigInputObject MainDatabase    
+        DatabaseConfigInputObject MainDatabase,
+        JWTConfig JWTConfig
     );
 }

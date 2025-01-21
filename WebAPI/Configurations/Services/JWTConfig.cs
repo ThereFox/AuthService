@@ -1,6 +1,8 @@
 namespace WebAPI.Configurations.Services;
 
-public class JWTConfig
-{
-    
-}
+public record JWTConfig
+(
+    string HeaderName,
+    string CookeyName,
+    string Secret
+);
